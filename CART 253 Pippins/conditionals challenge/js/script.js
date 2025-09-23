@@ -1,4 +1,6 @@
 /**
+ * AUTHORS - kai maquivar, Marc Pilliot, Benedict Ambayec
+ * 
  * Circle Master
  * Pippin Barr
  *
@@ -6,22 +8,23 @@
  * on the canvas using their own circle.
  */
 
-const puck = {
+const target = {
   x: 200,
   y: 200,
   size: 100,
-  fill: "#ff0000"
+  fill: "#402f9eff" ,
+  fills: {
+    noOverlap: "#402f9eff", // red for no overlap
+    overlap: "#2d672dff" // green for overlap 
+  }
 };
 
-const target = {
+const puck = {
   x: 300,
   y: 100,
   size: 100,
-  fill: "#402f9eff",
-  fills: {
-    noOverlap: "#402f9eff", // red for no overlap
-    overlap: "#2d672dff" // green for overlap
-  }
+  fill: "#ff0000"
+  
 
 };
 
@@ -97,12 +100,26 @@ function drawTarget() {
 function movePuck()
 {
     // Calculate distance between circles' centres
-  const d = dist(user.x, user.y, target.x, target.y);
-  const overL = (d < user.size/2 + target.size/2);
-  if (overL) {
-    target.fill = target.fills.overlap;
-  }
+  const d = dist(user.x, user.y, puck.x, puck.y);
+  const dC = dist(target.x, target.y, puck.x, puck.y)
+  const overLU = (d < user.size/2 + puck.size/2);
+  const overL = (dC < puck.size/2 + target.size/2);
+  if (overLU) {
+    puck.x += (puck.x - user.x) / 25
+    puck.y += (puck.y - user.y) / 25
+  } 
   else {
     target.fill = target.fills.noOverlap;
   }
+
+  if(overL)
+  {
+    target.fill = target.fills.overlap
+  }
+  else
+  {
+    target.fill = target.fills.noOverlap
+  }
+
+  
 }
