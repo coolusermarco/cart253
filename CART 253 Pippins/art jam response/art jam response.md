@@ -1,0 +1,32 @@
+Name: Marc-Antoine PILLIOT (student reviewing)
+
+1st review: Huynh Bao Khuong Nguyen
+(link: https://pentonfreak.github.io/Art-Jam-Assignment/)
+
+- Okay, well, first of all massive props on this project! You've basically made an entire pixel-art portrait from scratch using only JavaScript. That's actually quite impressive. You didn't take pre-existing assets, sprites, or even imported pictures — you typed each color block in by hand, rectangle by rectangle. That's dedication right there. The level of patience required to fill in all those fillRect() calls is wild, but it definitely pays off because the end result has real structure and depth. You’ve got shadows, highlights, skin tones, and even tiny details like hair shading and glasses. 
+The organization of your code is actually pretty clean too. You broke everything neatly up into sections "Eyes," "Mouth," "Hair," etc. That makes it simple to know which part of the face is being drawn. Personally, that's a genius idea because without those notes, this might've been a wall of utter chaos. And the color palette selections are great. The warm skin colors work well contrasted with the darker hair colors, and the glasses stick out visually. There's a touch of style in this, even with the pixel restraint.
+
+And then there's the interactive part  the rolling eyes. That's where this code goes from "nice picture" to "wow, that's really alive." The way that the eyes are tracking the position of your mouse adds a fun, surprising surprise that involves people and makes them smile. It's such a small thing, but it gives the work personality. The logic behind it checking if the mouse is over the left or right half of the canvas is simply simple but effective. Oftentimes all it takes to build something that's dynamic is that type of simplicity.
+
+I also like that you left your alternative solution (the commented-out right pupil movement) in the code. It's kind of neat to see a peek into your brain waves there, and it does show experimentation.
+
+Overall, this is a clever, technical, and even enjoyable project. You combined art and logic in a style that's uniquely your own like a self-portrait glowering back at you. Enjoy the atmosphere here. Great job!
+
+2nd review: Philippe Beauchemin
+(link: https://philippe-bn.github.io/cart253/topics/art-jam-assignment/)
+
+When I first tested this project, I couldn't help but grin because it is so cheerful and bright and full of personality. The yellow background immediately sends out "feel-good" vibes, and the "Hi! I'm Phil." immediately creates this warm, welcoming feel. Phil is waving hi to the user in his own little cartoon universe. Then you notice the rainbow, music note, and little invader emoji floating about in the background, and that's when you realize more than a static character is going on here things are moving!
+I love how much the elements of the background respond to the vertical placement of the mouse. When you move your mouse up and down, the music note and rainbow follow it, and that makes this dynamic, playful effect for the whole thing. It's a very smart and simple means of animating the background without the need for complex animation code. I like the way you referenced emojis as visual elements. It's such a fantastic and cool twist, and the fact that you used text() to do them shows that you were experimenting with the tools in another way, or perhaps you're used to it lol.
+Philippe himself too is really well done. The color palette looks balanced, the black top looks really well, and all the tiny details like the hair curls and glasses really make him so much more friendly. The waving arm animation is great too! You used rotation and mapping in a really smart way, and it's amazing how you experimented with new functions like translate(), rotate(), and map() to make it work. That his forearm traces around the elbow is such a wonderful detail, and the motion is natural.
+My personal favorite is most certainly the interactivity when you go over the eyes, they blink! It's just such a wonderful little detail, and it just makes the character almost come to life. It's such a tiny thing, but it is just so adorable. The smiling face that responds to the mouse clicks is another wonderful little perk as well. This project overall is just so expressive, creative, and just full of good energy. You can tell that you enjoyed making it, Well done, Philippe.
+
+3rd review: Yelena Arakelian
+(link: https://yelenaarakelian.github.io/cart253/topics/art-jam/)
+
+When I first tested this project, I told myself that this project was cheerful, fun, and full of personality. The pink sky, the sunny background, and the tiny floating clouds all create such a cheerful and playful atmosphere. It's as if you enter a world of bright cartoons. And then when I'd move my mouse, I was completely amazed, the cursor turned into a cookie, a bug flew around on the screen, and even Yelena's mouth responded to what I was doing!
+What I simply love is that everything in the project appears to be connected to my cursor movements. How the mouth opens and closes depending on how close the cookie (my cursor) is silly! It's a simple idea, but it adds so much personality and expression to Yelena's face lol, it's like Yelena is really trying to eat the cookie!
+The sound effects contribute to the humor as well. I was surprised when the eating sound started when the cookie came close to the mouth. Also, the buzzing background sound of the bug creates a sort of sunny, laid-back atmosphere, it sets the whole scene up like it's a sunny summer day despite the fact that the sounds get overwhelming after a while.
+The bee or bug itself is also great detail. The moveBee() function gets it going off in random directions, and that little randomness to movement makes the project dynamic and enjoyable. It's such a tiny little detail, but not only it must've taken a lot of time to code it, but it also brought personality to the whole scene. I also liked that you used random() to get that buzzing noise it's messy and cute all at once lol!
+Visually, the color palette is perfect for this project. The green ground and yellow sun are complemented perfectly by the pink background.
+Overall, this project is genuinely innovative, witty, and full of character. It combines color, audio, and interaction. Every detail, from the buzzing bee to the mouth with the cookie, is contributing to the aesthetic. I'm really amazed by your work Yelena!
+
