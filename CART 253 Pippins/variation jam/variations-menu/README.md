@@ -1,20 +1,11 @@
 # TITLE OF PROJECT
 
-Marc Pilliot
+AUTHOR NAME
 
 [View this project online](URL_FOR_THE_RUNNING_PROJECT)
 
 ## Description
-I found 3 ideas for this variation jam: I'm starting from the frogfrogfrog game
 
-1. game: STARFISH SNATCHER
-Underwater ocean environment and play as an octopus whose tentacle shoots out to grab treasures
-
-2. ALIEN LASER 
-You are an alien UFO hovering above a planet using a tractor beam instead of a tongue
-
-3. FRUIT SLASH
-You are a samurai slicing falling fruit with your katana (just like fruit ninja)
 This description should help the reader understand what the program is, anything they should know to be able to experience it (controls, special features, etc.), and what the desired user experience is. For example:
 
 > *The Mayor of Clown Town* is a simulator experience that allows the user to control a small town populated entirely by clowns.
