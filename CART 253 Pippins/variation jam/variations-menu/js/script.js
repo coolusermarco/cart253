@@ -1,3 +1,19 @@
+/**
+ * Starfish Snatcher
+ * based on Frogfrogfrog by Pippin Barr, modded by Marc Pilliot
+ * 
+ * A game of grabbing sea creatures with your octopus tentacle
+ * 
+ * Instructions:
+ * - Move the octopus with your mouse (x-axis)
+ * - Click to launch the tentacle
+ * - Grab starfish and clams
+ * - Avoid jellyfish, they stun you!
+ * 
+ * Made with p5
+ */
+
+"use strict";
 
 // ===== OCTOPUS (Player) =====
 const octopus = {
