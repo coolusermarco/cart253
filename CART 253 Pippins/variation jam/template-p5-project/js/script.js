@@ -1,49 +1,45 @@
 /**
- * Starfish Snatcher
- * Simple variation of Frogfrogfrog
- * Same structure, new theme
+ Prototype of the first game STARFISH SNATCHER, using my frogfrogfrog mod jam code and ressources listed in readme.md, i need to fix bugs and add more stuff like pngs and try to implement things i took notes of from my classmates' frogfrogfrog games
  */
 
 "use strict";
 
-// Our octopus
+// OCTOPUS
 const octopus = {
     body: { x: 320, y: 420, size: 140 },
 
-    tentacle: {
+    bubble: {
         x: undefined,
         y: 400,
-        size: 18,
+        size: 20,
         speed: 20,
-        state: "idle" // idle, outbound, inbound
+        state: "idle"
     },
 
     color: "#ff66aa",
     eyes: { size: 20, pupilSize: 10 },
-    colorTimer: 0
 };
 
-// Variables
 let creatures = [];
 let score = 0;
 let timer = 60;
-let tentacleCooldown = 0;
+let bubbleCooldown = 0;
 
 let level = 1;
 let levelTime = 60;
 let maxLevel = 3;
 
-let gameState = "menu";
 let highScore = 0;
+let gameState = "menu";
 
-// Setup
+// SETUP
 function setup() {
     createCanvas(640, 480);
     initGame();
 }
 
 function draw() {
-    background("#003355"); // deep ocean blue
+    background("#003355");
     drawSeaFloor();
 
     if (gameState === "menu") drawMenuScreen();
@@ -52,10 +48,11 @@ function draw() {
         drawCreatures();
 
         moveOctopus();
-        moveTentacle();
+        moveBubble();
         drawOctopus();
+        drawBubble();
 
-        checkTentacleCreatureOverlap();
+        checkBubbleCreaturesOverlap();
         updateTimers();
         displayUI();
 
@@ -67,7 +64,7 @@ function draw() {
     else if (gameState === "gameover") drawGameOverScreen();
 }
 
-// Sea floor
+// SEA FLOOR
 function drawSeaFloor() {
     push();
     fill("#332200");
@@ -75,10 +72,9 @@ function drawSeaFloor() {
     pop();
 }
 
-// Menu screen
+// MENU SCREEN
 function drawMenuScreen() {
-    push();
-    fill(255, 40);
+    fill(255, 50);
     rect(0, 0, width, height);
 
     fill(255);
@@ -88,19 +84,17 @@ function drawMenuScreen() {
 
     textSize(18);
     text("Move the octopus with your mouse", width/2, height/2 - 20);
-    text("Click to launch the tentacle", width/2, height/2 + 10);
-    text("Grab ★ starfish & shells!", width/2, height/2 + 40);
+    text("Click to shoot a bubble", width/2, height/2 + 10);
+    text("Catch ★ starfish & shells!", width/2, height/2 + 40);
     text("Avoid jellyfish (score -2)", width/2, height/2 + 70);
 
     fill("#ffdd00");
     textSize(22);
-    text("Click anywhere to start", width/2, height/2 + 120);
-    pop();
+    text("Click to start!", width/2, height/2 + 120);
 }
 
-// Game over
+// GAME OVER SCREEN
 function drawGameOverScreen() {
-    push();
     fill(255, 80);
     rect(0,0,width,height);
 
@@ -120,37 +114,37 @@ function drawGameOverScreen() {
 
     fill("#ffdd00");
     textSize(22);
-    text("Click anywhere to continue!", width/2, height/2 + 110);
-    pop();
+    text("Click to continue!", width/2, height/2 + 110);
 }
 
+// INIT GAME
 function initGame() {
     initCreatures();
     timer = levelTime;
 }
 
-// Creatures (starfish, shell, jellyfish)
+// CREATE CREATURES
 function initCreatures() {
     creatures = [];
     
     for (let i = 0; i < 6; i++) {
         let r = random();
-        let type = "shell";  // default
+        let type = "shell";
 
-        if (r < 0.2) type = "jelly";     // 20%
-        else if (r < 0.5) type = "star"; // 30%
+        if (r < 0.2) type = "jelly";
+        else if (r < 0.5) type = "star";
 
         creatures.push({
             x: random(width),
             y: random(280),
-            size: random(14, 20),
-            speed: random(2, 4),
+            size: random(15, 22),
+            speed: random(2, 3.5),
             type
         });
     }
 }
 
-// Move creatures
+// MOVE CREATURES
 function moveCreatures() {
     for (let c of creatures) {
         c.x += c.speed;
@@ -163,110 +157,83 @@ function moveCreatures() {
     }
 }
 
-// Draw creatures
+// CREATURES
 function drawCreatures() {
     for (let c of creatures) {
-        push();
         noStroke();
 
-        if (c.type === "star") fill("#ffcc00");     // yellow
-        else if (c.type === "jelly") fill("#ff5555"); // red-ish
-        else fill("#ffffff");                        // shell
+        if (c.type === "star") fill("#ffcc00");
+        else if (c.type === "jelly") fill("#ff5555");
+        else fill("#eeeeee");
 
         ellipse(c.x, c.y, c.size);
-        pop();
     }
 }
 
-// Move octopus
+// MOVE OCTOPUS
 function moveOctopus() {
     octopus.body.x = mouseX;
 }
 
-// Move tentacle
-function moveTentacle() {
-    octopus.tentacle.x = octopus.body.x;
+// MOVE BUBBLE
+function moveBubble() {
+    octopus.bubble.x = octopus.body.x;
 
-    if (octopus.tentacle.state === "idle") return;
-
-    if (octopus.tentacle.state === "outbound") {
-        octopus.tentacle.y -= octopus.tentacle.speed;
-        if (octopus.tentacle.y <= 0)
-            octopus.tentacle.state = "inbound";
+    if (octopus.bubble.state === "idle") {
+        octopus.bubble.y = octopus.body.y - 20;
+        return;
     }
-    else if (octopus.tentacle.state === "inbound") {
-        octopus.tentacle.y += octopus.tentacle.speed;
-        if (octopus.tentacle.y >= octopus.body.y - 20) {
-            octopus.tentacle.state = "idle";
-            octopus.tentacle.y = octopus.body.y - 20;
+
+    if (octopus.bubble.state === "outbound") {
+        octopus.bubble.y -= octopus.bubble.speed;
+
+        if (octopus.bubble.y <= 0) {
+            octopus.bubble.state = "idle";
+            octopus.bubble.y = octopus.body.y - 20;
         }
     }
 }
 
-// Draw octopus
+// BUBBLE
+function drawBubble() {
+    if (octopus.bubble.state !== "idle") {
+        fill("#88ccff");
+        noStroke();
+        ellipse(octopus.bubble.x, octopus.bubble.y, octopus.bubble.size);
+    }
+}
+
+// OCTOPUS
 function drawOctopus() {
-    // Tentacle
-    push();
-    stroke("#ff8888");
-    strokeWeight(octopus.tentacle.size);
-    line(
-        octopus.tentacle.x,
-        octopus.tentacle.y,
-        octopus.body.x,
-        octopus.body.y
-    );
-    pop();
-
-    // Tentacle tip
-    push();
-    fill("#ff6666");
-    noStroke();
-    ellipse(octopus.tentacle.x, octopus.tentacle.y, octopus.tentacle.size);
-    pop();
-
-    // Body
-    push();
     fill(octopus.color);
     noStroke();
     ellipse(octopus.body.x, octopus.body.y, octopus.body.size);
-    pop();
 
     drawEyes();
 }
 
-// Eyes
+// EYES
 function drawEyes() {
     let eyeOffset = 25;
     let eyeY = octopus.body.y - 40;
 
-    let pupilOffset = 5;
-
-    let leftEyeX = octopus.body.x - eyeOffset;
-    let rightEyeX = octopus.body.x + eyeOffset;
-
     fill(255);
-    ellipse(leftEyeX, eyeY, octopus.eyes.size);
-    ellipse(rightEyeX, eyeY, octopus.eyes.size);
+    ellipse(octopus.body.x - eyeOffset, eyeY, 20);
+    ellipse(octopus.body.x + eyeOffset, eyeY, 20);
 
     fill(0);
-    ellipse(
-        leftEyeX + constrain((mouseX - leftEyeX) * 0.1, -pupilOffset, pupilOffset),
-        eyeY + constrain((mouseY - eyeY) * 0.1, -pupilOffset, pupilOffset),
-        octopus.eyes.pupilSize
-    );
-    ellipse(
-        rightEyeX + constrain((mouseX - rightEyeX) * 0.1, -pupilOffset, pupilOffset),
-        eyeY + constrain((mouseY - eyeY) * 0.1, -pupilOffset, pupilOffset),
-        octopus.eyes.pupilSize
-    );
+    ellipse(octopus.body.x - eyeOffset + 3, eyeY, 8);
+    ellipse(octopus.body.x + eyeOffset - 3, eyeY, 8);
 }
 
-// Check collisions
-function checkTentacleCreatureOverlap() {
-    for (let c of creatures) {
-        let d = dist(octopus.tentacle.x, octopus.tentacle.y, c.x, c.y);
+// COLLISIONS
+function checkBubbleCreaturesOverlap() {
+    if (octopus.bubble.state === "idle") return;
 
-        if (d < octopus.tentacle.size/2 + c.size/2) {
+    for (let c of creatures) {
+        let d = dist(octopus.bubble.x, octopus.bubble.y, c.x, c.y);
+
+        if (d < octopus.bubble.size/2 + c.size/2) {
             handleCreatureCatch(c);
             c.x = random(width);
             c.y = random(280);
@@ -279,10 +246,10 @@ function handleCreatureCatch(c) {
     else if (c.type === "shell") score++;
     else if (c.type === "jelly") score -= 2;
 
-    octopus.tentacle.state = "inbound";
+    octopus.bubble.state = "idle";
 }
 
-// Input
+// MOUSE CLICK
 function mousePressed() {
     if (gameState === "menu" || gameState === "gameover") {
         if (level < maxLevel) {
@@ -293,31 +260,36 @@ function mousePressed() {
             levelTime = 60;
             score = 0;
         }
+
         initGame();
         gameState = "play";
         return;
     }
 
-    if (octopus.tentacle.state === "idle" && tentacleCooldown <= 0) {
-        octopus.tentacle.state = "outbound";
-        tentacleCooldown = 25;
+    if (octopus.bubble.state === "idle" && bubbleCooldown <= 0) {
+        octopus.bubble.state = "outbound";
+        bubbleCooldown = 20;
     }
 }
 
-// Timers
+// TIMERS
 function updateTimers() {
     if (frameCount % 60 === 0 && timer > 0) timer--;
-    if (tentacleCooldown > 0) tentacleCooldown--;
+    if (bubbleCooldown > 0) bubbleCooldown--;
 }
 
-// UI
+// UI 
 function displayUI() {
+    push();
     fill(255);
     textSize(20);
+
     text(`Score: ${score}`, 10, 20);
     text(`Time: ${timer}`, 10, 40);
     text(`Level: ${level}`, 10, 60);
 
-    if (tentacleCooldown > 0)
+    if (bubbleCooldown > 0) 
         text("Cooldown...", 10, 80);
+
+    pop();
 }
