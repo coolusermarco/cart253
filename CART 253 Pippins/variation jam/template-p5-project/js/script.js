@@ -1,5 +1,7 @@
 /**
- Prototype of the first game STARFISH SNATCHER, using my frogfrogfrog mod jam code and ressources listed in readme.md, i need to fix bugs and add more stuff like pngs and try to implement things i took notes of from my classmates' frogfrogfrog games
+ Prototype of the first game STARFISH SNATCHER, 
+ using my frogfrogfrog mod jam code and ressources listed in readme.md, 
+ i need to fix bugs and add more stuff like pngs and try to implement things i took notes of from my classmates' frogfrogfrog games
  */
 
 "use strict";
@@ -33,8 +35,13 @@ let highScore = 0;
 let gameState = "menu";
 
 // SETUP
+
+function preload(){
+    //starImg = loadImage("assets/images/star.png");
+}
 function setup() {
     createCanvas(640, 480);
+    textFont("Cinzel");
     initGame();
 }
 
@@ -284,12 +291,12 @@ function displayUI() {
     fill(255);
     textSize(20);
 
-    text(`Score: ${score}`, 10, 20);
-    text(`Time: ${timer}`, 10, 40);
-    text(`Level: ${level}`, 10, 60);
+    text(`Score: ${score}`, 50, 20);
+    text(`Time: ${timer}`, 50, 40);
+    text(`Level: ${level}`, 50, 60);
 
     if (bubbleCooldown > 0) 
-        text("Cooldown...", 10, 80);
+        text("Cooldown...", 70, 80);
 
     pop();
 }
