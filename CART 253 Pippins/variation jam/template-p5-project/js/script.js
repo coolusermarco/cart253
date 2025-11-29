@@ -22,6 +22,13 @@ const octopus = {
     eyes: { size: 20, pupilSize: 10 },
 };
 
+// IMAGES FOR CREATURES + BACKGROUND + OCTOPUS
+let starImg;
+let shellImg;
+let jellyImg;
+let bgImg;
+let octopusImg;
+
 let creatures = [];
 let score = 0;
 let timer = 60;
@@ -34,20 +41,32 @@ let maxLevel = 3;
 let highScore = 0;
 let gameState = "menu";
 
-// SETUP
-
-function preload(){
-    //starImg = loadImage("assets/images/star.png");
+// PRELOAD
+function preload() {
+    starImg  = loadImage("assets/images/star.png");
+    shellImg = loadImage("assets/images/shell.png");
+    jellyImg = loadImage("assets/images/jelly.png");
+    bgImg    = loadImage("assets/images/seafloor.png");
+    octopusImg = loadImage("assets/images/octopus.png");
 }
+
+// SETUP
 function setup() {
     createCanvas(640, 480);
     textFont("Cinzel");
+    imageMode(CENTER);
     initGame();
 }
 
 function draw() {
-    background("#003355");
-    drawSeaFloor();
+    if (bgImg) {
+        imageMode(CORNER);    
+        image(bgImg, 0, 0, width, height);
+        imageMode(CENTER);     
+    } else {
+        background("#003355"); 
+        drawSeaFloor();         
+    }
 
     if (gameState === "menu") drawMenuScreen();
     else if (gameState === "play") {
@@ -92,7 +111,7 @@ function drawMenuScreen() {
     textSize(18);
     text("Move the octopus with your mouse", width/2, height/2 - 20);
     text("Click to shoot a bubble", width/2, height/2 + 10);
-    text("Catch ★ starfish & shells!", width/2, height/2 + 40);
+    text("Catch starfish and shells!", width/2, height/2 + 40);
     text("Avoid jellyfish (score -2)", width/2, height/2 + 70);
 
     fill("#ffdd00");
@@ -164,16 +183,26 @@ function moveCreatures() {
     }
 }
 
-// CREATURES
+// CREATURES 
 function drawCreatures() {
     for (let c of creatures) {
-        noStroke();
+        let img = null;
 
-        if (c.type === "star") fill("#ffcc00");
-        else if (c.type === "jelly") fill("#ff5555");
-        else fill("#eeeeee");
+        if (c.type === "star")       img = starImg;
+        else if (c.type === "jelly") img = jellyImg;
+        else if (c.type === "shell") img = shellImg;
 
-        ellipse(c.x, c.y, c.size);
+        if (img) {
+            const w = c.size * 2;
+            const h = c.size * 2;
+            image(img, c.x, c.y, w, h);
+        } else {
+            noStroke();
+            if (c.type === "star") fill("#ffcc00");
+            else if (c.type === "jelly") fill("#ff5555");
+            else fill("#eeeeee");
+            ellipse(c.x, c.y, c.size);
+        }
     }
 }
 
@@ -212,11 +241,16 @@ function drawBubble() {
 
 // OCTOPUS
 function drawOctopus() {
-    fill(octopus.color);
-    noStroke();
-    ellipse(octopus.body.x, octopus.body.y, octopus.body.size);
-
-    drawEyes();
+    if (octopusImg) {
+        const w = octopus.body.size * 1.2;
+        const h = octopus.body.size * 1.2;
+        image(octopusImg, octopus.body.x, octopus.body.y, w, h);
+    } else {
+        fill(octopus.color);
+        noStroke();
+        ellipse(octopus.body.x, octopus.body.y, octopus.body.size);
+        drawEyes();
+    }
 }
 
 // EYES
