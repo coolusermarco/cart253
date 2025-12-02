@@ -1,5 +1,4 @@
-/**
- Prototype of the first game STARFISH SNATCHER, 
+/** STARFISH SNATCHER, 
  using my frogfrogfrog mod jam code and ressources listed in readme.md, 
  i need to fix bugs and add more stuff like pngs and try to implement things i took notes of from my classmates' frogfrogfrog games
  */
