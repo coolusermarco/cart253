@@ -6,326 +6,318 @@
 "use strict";
 
 // OCTOPUS
-const octopus = {
-    body: { x: 320, y: 420, size: 140 },
+const redOctopus = {
+  body: { x: 320, y: 420, size: 140 },
 
-    bubble: {
-        x: undefined,
-        y: 400,
-        size: 20,
-        speed: 20,
-        state: "idle"
-    },
+  bubble: {
+    x: undefined,
+    y: 400,
+    size: 20,
+    speed: 20,
+    state: "idle"
+  },
 
-    color: "#ff66aa",
-    eyes: { size: 20, pupilSize: 10 },
+  color: "#ff66aa",
+  eyes: { size: 20, pupilSize: 10 },
 };
 
 // IMAGES FOR CREATURES + BACKGROUND + OCTOPUS
-let starImg;
-let shellImg;
-let jellyImg;
-let bgImg;
-let octopusImg;
-let creatures = [];
-let score = 0;
-let timer = 60;
-let bubbleCooldown = 0;
-let level = 1;
-let levelTime = 60;
-let maxLevel = 3;
-let highScore = 0;
-let gameState = "menu";
+let redStarImg;
+let redShellImg;
+let redJellyImg;
+let redBgImg;
+let redOctopusImg;
 
-function preload() {
-    starImg  = loadImage("assets/images/star.png");
-    shellImg = loadImage("assets/images/shell.png");
-    jellyImg = loadImage("assets/images/jelly.png");
-    bgImg    = loadImage("assets/images/seafloor.png");
-    octopusImg = loadImage("assets/images/octopus.png");
+let redCreatures = [];
+let redScore = 0;
+let redTimer = 60;
+let redBubbleCooldown = 0;
+let redLevel = 1;
+let redLevelTime = 60;
+let redMaxLevel = 3;
+let redHighScore = 0;
+let redGameState = "menu";
+
+function redPreload() {
+  redStarImg    = loadImage("assets/images/star.png");
+  redShellImg   = loadImage("assets/images/shell.png");
+  redJellyImg   = loadImage("assets/images/jelly.png");
+  redBgImg      = loadImage("assets/images/seafloor.png");
+  redOctopusImg = loadImage("assets/images/octopus.png");
 }
 
-// SETUP
-function setup() {
-    createCanvas(640, 480);
-    textFont("Cinzel");
+function redSetup() {
+  redGameState = "menu";
+  redLevel     = 1;
+  redLevelTime = 60;
+  redScore     = 0;
+  redInitGame();
+}
+
+// DRAW
+function redDraw() {
+  if (redBgImg) {
+    imageMode(CORNER);
+    image(redBgImg, 0, 0, width, height);
     imageMode(CENTER);
-    initGame();
+  } else {
+    background("#003355");
+    redDrawSeaFloor();
+  }
+
+  if (redGameState === "menu") {
+    redDrawMenuScreen();
+  }
+  else if (redGameState === "play") {
+    redMoveCreatures();
+    redDrawCreatures();
+
+    redMoveOctopus();
+    redMoveBubble();
+    redDrawOctopus();
+    redDrawBubble();
+
+    redCheckBubbleCreaturesOverlap();
+    redUpdateTimers();
+    redDisplayUI();
+
+    if (redTimer <= 0) {
+      if (redScore > redHighScore) redHighScore = redScore;
+      redGameState = "gameover";
+    }
+  }
+  else if (redGameState === "gameover") {
+    redDrawGameOverScreen();
+  }
 }
 
-function draw() {
-    if (bgImg) {
-        imageMode(CORNER);    
-        image(bgImg, 0, 0, width, height);
-        imageMode(CENTER);     
+function redMousePressed() {
+  if (redGameState === "menu" || redGameState === "gameover") {
+    if (redLevel < redMaxLevel) {
+      redLevel++;
+      redLevelTime -= 10;
     } else {
-        background("#003355"); 
-        drawSeaFloor();         
+      redLevel = 1;
+      redLevelTime = 60;
+      redScore = 0;
     }
 
-    if (gameState === "menu") drawMenuScreen();
-    else if (gameState === "play") {
-        moveCreatures();
-        drawCreatures();
+    redInitGame();
+    redGameState = "play";
+    return;
+  }
 
-        moveOctopus();
-        moveBubble();
-        drawOctopus();
-        drawBubble();
+  if (redOctopus.bubble.state === "idle" && redBubbleCooldown <= 0) {
+    redOctopus.bubble.state = "outbound";
+    redBubbleCooldown = 20;
+  }
+}
+function redKeyPressed(event) {
+}
 
-        checkBubbleCreaturesOverlap();
-        updateTimers();
-        displayUI();
+function redDrawSeaFloor() {
+  push();
+  fill("#332200");
+  rect(0, height - 60, width, 60);
+  pop();
+}
 
-        if (timer <= 0) {
-            if (score > highScore) highScore = score;
-            gameState = "gameover";
-        }
+function redDrawMenuScreen() {
+  fill(255, 50);
+  rect(0, 0, width, height);
+
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(36);
+  text("STARFISH SNATCHER", width/2, height/2 - 80);
+
+  textSize(18);
+  text("Move the octopus with your mouse", width/2, height/2 - 20);
+  text("Click to shoot a bubble", width/2, height/2 + 10);
+  text("Catch starfish and shells", width/2, height/2 + 40);
+  text("Avoid jellyfish (score -2)", width/2, height/2 + 70);
+
+  fill("#ffdd00");
+  textSize(22);
+  text("Click to start!", width/2, height/2 + 120);
+}
+
+function redDrawGameOverScreen() {
+  fill(255, 80);
+  rect(0,0,width,height);
+
+  fill(0);
+  textAlign(CENTER, CENTER);
+  textSize(48);
+
+  if (redLevel >= redMaxLevel)
+    text("FINAL GAME OVER", width/2, height/2 - 80);
+  else
+    text("LEVEL COMPLETE!", width/2, height/2 - 80);
+
+  textSize(28);
+  text(`Score: ${redScore}`, width/2, height/2 - 20);
+  text(`High Score: ${redHighScore}`, width/2, height/2 + 20);
+  text(`Level: ${redLevel}`, width/2, height/2 + 60);
+
+  fill("#ffdd00");
+  textSize(22);
+  text("Click to continue!", width/2, height/2 + 110);
+}
+
+function redInitGame() {
+  redInitCreatures();
+  redTimer = redLevelTime;
+}
+
+function redInitCreatures() {
+  redCreatures = [];
+
+  for (let i = 0; i < 6; i++) {
+    let r = random();
+    let type = "shell";
+
+    if (r < 0.2) type = "jelly";
+    else if (r < 0.5) type = "star";
+
+    redCreatures.push({
+      x: random(width),
+      y: random(280),
+      size: random(15, 22),
+      speed: random(2, 3.5),
+      type
+    });
+  }
+}
+
+function redMoveCreatures() {
+  for (let c of redCreatures) {
+    c.x += c.speed;
+    c.y += sin(frameCount * 0.05) * 1.2;
+
+    if (c.x > width) {
+      c.x = 0;
+      c.y = random(280);
     }
-    else if (gameState === "gameover") drawGameOverScreen();
+  }
 }
 
-// SEA FLOOR
-function drawSeaFloor() {
-    push();
-    fill("#332200");
-    rect(0, height - 60, width, 60);
-    pop();
-}
+function redDrawCreatures() {
+  for (let c of redCreatures) {
+    let img = null;
 
-// MENU SCREEN
-function drawMenuScreen() {
-    fill(255, 50);
-    rect(0, 0, width, height);
+    if (c.type === "star")       img = redStarImg;
+    else if (c.type === "jelly") img = redJellyImg;
+    else if (c.type === "shell") img = redShellImg;
 
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(36);
-    text("STARFISH SNATCHER", width/2, height/2 - 80);
-
-    textSize(18);
-    text("Move the octopus with your mouse", width/2, height/2 - 20);
-    text("Click to shoot a bubble", width/2, height/2 + 10);
-    text("Catch starfish and shells", width/2, height/2 + 40);
-    text("Avoid jellyfish (score -2)", width/2, height/2 + 70);
-
-    fill("#ffdd00");
-    textSize(22);
-    text("Click to start!", width/2, height/2 + 120);
-}
-
-// GAME OVER SCREEN
-function drawGameOverScreen() {
-    fill(255, 80);
-    rect(0,0,width,height);
-
-    fill(0);
-    textAlign(CENTER, CENTER);
-    textSize(48);
-
-    if (level >= maxLevel)
-        text("FINAL GAME OVER", width/2, height/2 - 80);
-    else
-        text("LEVEL COMPLETE!", width/2, height/2 - 80);
-
-    textSize(28);
-    text(`Score: ${score}`, width/2, height/2 - 20);
-    text(`High Score: ${highScore}`, width/2, height/2 + 20);
-    text(`Level: ${level}`, width/2, height/2 + 60);
-
-    fill("#ffdd00");
-    textSize(22);
-    text("Click to continue!", width/2, height/2 + 110);
-}
-
-// INIT GAME
-function initGame() {
-    initCreatures();
-    timer = levelTime;
-}
-
-// CREATE CREATURES
-function initCreatures() {
-    creatures = [];
-    
-    for (let i = 0; i < 6; i++) {
-        let r = random();
-        let type = "shell";
-
-        if (r < 0.2) type = "jelly";
-        else if (r < 0.5) type = "star";
-
-        creatures.push({
-            x: random(width),
-            y: random(280),
-            size: random(15, 22),
-            speed: random(2, 3.5),
-            type
-        });
-    }
-}
-
-// MOVE CREATURES
-function moveCreatures() {
-    for (let c of creatures) {
-        c.x += c.speed;
-        c.y += sin(frameCount * 0.05) * 1.2;
-
-        if (c.x > width) {
-            c.x = 0;
-            c.y = random(280);
-        }
-    }
-}
-
-// CREATURES 
-function drawCreatures() {
-    for (let c of creatures) {
-        let img = null;
-
-        if (c.type === "star")       img = starImg;
-        else if (c.type === "jelly") img = jellyImg;
-        else if (c.type === "shell") img = shellImg;
-
-        if (img) {
-            const w = c.size * 2;
-            const h = c.size * 2;
-            image(img, c.x, c.y, w, h);
-        } else {
-            noStroke();
-            if (c.type === "star") fill("#ffcc00");
-            else if (c.type === "jelly") fill("#ff5555");
-            else fill("#eeeeee");
-            ellipse(c.x, c.y, c.size);
-        }
-    }
-}
-
-// MOVE OCTOPUS
-function moveOctopus() {
-    octopus.body.x = mouseX;
-}
-
-// MOVE BUBBLE
-function moveBubble() {
-    octopus.bubble.x = octopus.body.x;
-
-    if (octopus.bubble.state === "idle") {
-        octopus.bubble.y = octopus.body.y - 20;
-        return;
-    }
-
-    if (octopus.bubble.state === "outbound") {
-        octopus.bubble.y -= octopus.bubble.speed;
-
-        if (octopus.bubble.y <= 0) {
-            octopus.bubble.state = "idle";
-            octopus.bubble.y = octopus.body.y - 20;
-        }
-    }
-}
-
-// BUBBLE
-function drawBubble() {
-    if (octopus.bubble.state !== "idle") {
-        fill("#88ccff");
-        noStroke();
-        ellipse(octopus.bubble.x, octopus.bubble.y, octopus.bubble.size);
-    }
-}
-
-// OCTOPUS
-function drawOctopus() {
-    if (octopusImg) {
-        const w = octopus.body.size * 1.2;
-        const h = octopus.body.size * 1.2;
-        image(octopusImg, octopus.body.x, octopus.body.y, w, h);
+    if (img) {
+      const w = c.size * 2;
+      const h = c.size * 2;
+      image(img, c.x, c.y, w, h);
     } else {
-        fill(octopus.color);
-        noStroke();
-        ellipse(octopus.body.x, octopus.body.y, octopus.body.size);
-        drawEyes();
+      noStroke();
+      if (c.type === "star") fill("#ffcc00");
+      else if (c.type === "jelly") fill("#ff5555");
+      else fill("#eeeeee");
+      ellipse(c.x, c.y, c.size);
     }
+  }
 }
 
-// EYES
-function drawEyes() {
-    let eyeOffset = 25;
-    let eyeY = octopus.body.y - 40;
-
-    fill(255);
-    ellipse(octopus.body.x - eyeOffset, eyeY, 20);
-    ellipse(octopus.body.x + eyeOffset, eyeY, 20);
-
-    fill(0);
-    ellipse(octopus.body.x - eyeOffset + 3, eyeY, 8);
-    ellipse(octopus.body.x + eyeOffset - 3, eyeY, 8);
+function redMoveOctopus() {
+  redOctopus.body.x = mouseX;
 }
 
-// COLLISIONS
-function checkBubbleCreaturesOverlap() {
-    if (octopus.bubble.state === "idle") return;
+function redMoveBubble() {
+  redOctopus.bubble.x = redOctopus.body.x;
 
-    for (let c of creatures) {
-        let d = dist(octopus.bubble.x, octopus.bubble.y, c.x, c.y);
+  if (redOctopus.bubble.state === "idle") {
+    redOctopus.bubble.y = redOctopus.body.y - 20;
+    return;
+  }
 
-        if (d < octopus.bubble.size/2 + c.size/2) {
-            handleCreatureCatch(c);
-            c.x = random(width);
-            c.y = random(280);
-        }
+  if (redOctopus.bubble.state === "outbound") {
+    redOctopus.bubble.y -= redOctopus.bubble.speed;
+
+    if (redOctopus.bubble.y <= 0) {
+      redOctopus.bubble.state = "idle";
+      redOctopus.bubble.y = redOctopus.body.y - 20;
     }
+  }
 }
 
-function handleCreatureCatch(c) {
-    if (c.type === "star") score += 3;
-    else if (c.type === "shell") score++;
-    else if (c.type === "jelly") score -= 2;
-
-    octopus.bubble.state = "idle";
+function redDrawBubble() {
+  if (redOctopus.bubble.state !== "idle") {
+    fill("#88ccff");
+    noStroke();
+    ellipse(redOctopus.bubble.x, redOctopus.bubble.y, redOctopus.bubble.size);
+  }
 }
 
-// MOUSE CLICK
-function mousePressed() {
-    if (gameState === "menu" || gameState === "gameover") {
-        if (level < maxLevel) {
-            level++;
-            levelTime -= 10;
-        } else {
-            level = 1;
-            levelTime = 60;
-            score = 0;
-        }
+function redDrawOctopus() {
+  if (redOctopusImg) {
+    const w = redOctopus.body.size * 1.2;
+    const h = redOctopus.body.size * 1.2;
+    image(redOctopusImg, redOctopus.body.x, redOctopus.body.y, w, h);
+  } else {
+    fill(redOctopus.color);
+    noStroke();
+    ellipse(redOctopus.body.x, redOctopus.body.y, redOctopus.body.size);
+    redDrawEyes();
+  }
+}
 
-        initGame();
-        gameState = "play";
-        return;
+function redDrawEyes() {
+  let eyeOffset = 25;
+  let eyeY = redOctopus.body.y - 40;
+
+  fill(255);
+  ellipse(redOctopus.body.x - eyeOffset, eyeY, 20);
+  ellipse(redOctopus.body.x + eyeOffset, eyeY, 20);
+
+  fill(0);
+  ellipse(redOctopus.body.x - eyeOffset + 3, eyeY, 8);
+  ellipse(redOctopus.body.x + eyeOffset - 3, eyeY, 8);
+}
+
+function redCheckBubbleCreaturesOverlap() {
+  if (redOctopus.bubble.state === "idle") return;
+
+  for (let c of redCreatures) {
+    let d = dist(redOctopus.bubble.x, redOctopus.bubble.y, c.x, c.y);
+
+    if (d < redOctopus.bubble.size/2 + c.size/2) {
+      redHandleCreatureCatch(c);
+      c.x = random(width);
+      c.y = random(280);
     }
-
-    if (octopus.bubble.state === "idle" && bubbleCooldown <= 0) {
-        octopus.bubble.state = "outbound";
-        bubbleCooldown = 20;
-    }
+  }
 }
 
-// TIMERS
-function updateTimers() {
-    if (frameCount % 60 === 0 && timer > 0) timer--;
-    if (bubbleCooldown > 0) bubbleCooldown--;
+function redHandleCreatureCatch(c) {
+  if (c.type === "star") redScore += 3;
+  else if (c.type === "shell") redScore++;
+  else if (c.type === "jelly") redScore -= 2;
+
+  redOctopus.bubble.state = "idle";
 }
 
-// UI 
-function displayUI() {
-    push();
-    fill(255);
-    textSize(20);
+function redUpdateTimers() {
+  if (frameCount % 60 === 0 && redTimer > 0) redTimer--;
+  if (redBubbleCooldown > 0) redBubbleCooldown--;
+}
 
-    text(`Score: ${score}`, 50, 20);
-    text(`Time: ${timer}`, 50, 40);
-    text(`Level: ${level}`, 50, 60);
+function redDisplayUI() {
+  push();
+  fill(255);
+  textSize(20);
 
-    if (bubbleCooldown > 0) 
-        text("Cooldown...", 70, 80);
+  text(`Score: ${redScore}`, 50, 20);
+  text(`Time: ${redTimer}`, 50, 40);
+  text(`Level: ${redLevel}`, 50, 60);
 
-    pop();
+  if (redBubbleCooldown > 0)
+    text("Cooldown...", 70, 80);
+
+  pop();
 }

@@ -11,7 +11,7 @@ I found 3 ideas for this variation jam: I'm starting from the frogfrogfrog game
 Underwater ocean environment and play as an octopus whose tentacle shoots out to grab treasures
 
 2. ALIEN LASER 
-You are an alien UFO hovering above a planet using a tractor beam instead of a tongue
+You are an alien UFO hovering above a planet using a tractor beam instead of a tongue, click to shoot
 
 3. FRUIT SLASH
 You are a samurai slicing falling fruit with your katana (just like fruit ninja)
@@ -33,10 +33,20 @@ This bit should have some images of the program running so that the reader has a
 
 This bit should attribute any code, assets or other elements used taken from other sources. For example:
 
-> - This project uses [p5.js](https://p5js.org).
+> - This project uses a lot of tutorials from the coding train, [p5.js](https://p5js.org).
 > - https://p5js.org/examples/angles-and-motion-sine-cosine/
-https://www.geeksforgeeks.org/javascript/how-to-create-animation-of-sine-wave-pattern-using-p5-js/
+https://editor.p5js.org/mleisz/sketches/zNFvlBgbJ
 
+https://www.geeksforgeeks.org/javascript/how-to-create-animation-of-sine-wave-pattern-using-p5-js/
+https://www.youtube.com/watch?v=GusFmfBmJmc
+https://www.youtube.com/watch?v=Aw9kMrPktfc
+https://www.youtube.com/watch?v=StoBCNiQakM
+https://www.youtube.com/watch?v=d21jNGfeNOU
+https://www.youtube.com/watch?v=M6-FYJtTDm8
+https://www.youtube.com/watch?v=GY-c2HO2liA
+https://www.youtube.com/watch?v=8ZEMLCnn8v0
+https://www.youtube.com/watch?v=fBqaA7zRO58
+https://www.youtube.com/watch?v=Uibl0UE4VH8
 
 ## License
 

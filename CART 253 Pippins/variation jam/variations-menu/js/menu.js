@@ -5,9 +5,9 @@
  */
 
 const menuText = `
-(R) Red variation
-(G) Green variation
-(B) Blue variation`
+(R) Starfish Snatcher
+(G) Alien Laser
+(B) Fruit Slash`;
 
 /**
  * Display the main menu

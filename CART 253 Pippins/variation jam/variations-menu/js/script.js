@@ -11,11 +11,18 @@
 
 let state = "menu";
 
+function preload() {
+  redPreload();
+  greenPreload();
+  bluePreload();
+}
 /**
  * Create the canvas
 */
 function setup() {
-    createCanvas(500, 500);
+  createCanvas(640, 480);
+  textFont("Cinzel");
+  imageMode(CENTER);
 }
 
 
